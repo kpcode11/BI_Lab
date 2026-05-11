@@ -1,9 +1,3 @@
-Optimized tool selectionHere is a complete, well-structured report document matching your teacher's exact template. You can copy and paste this directly into your final report. 
-
-Below the report, I have also included a quick "What to say" guide for your actual presentation.
-
-***
-
 **Title : MINI – PROJECT - BI Report** 
 
 **Problem Definition :** 
@@ -44,10 +38,3 @@ Based on the BI analysis, the management team should take the following strategi
 3.  **Optimize Logistics:** Since shipping duration negatively correlates with customer ratings, the business must discontinue contracts with underperforming shipping modes for fragile/expensive items, prioritizing faster fulfillment to preserve customer satisfaction.
 
 ***
-
-### 💡 Presentation Tips (What to say to your teacher):
-
-*   **"Hook" the teacher:** Start by saying, *"Data is useless if a manager can't read it. I built this BI dashboard to take 45,000 messy rows of CSV data and turn it into decisions."*
-*   **Show off the DAX:** Mention that you didn't just drag-and-drop visuals. Tell them, *"I wrote Data Analysis Expressions (DAX) to create custom metrics that weren't in the dataset, like 'Return Rate %' and 'Revenue per Customer'."*
-*   **Demonstrate the Slicer:** While presenting the screen, explicitly click on your "Year" or "Segment" filters to show how the *entire* dashboard interacts and updates dynamically in real-time. Teachers love interactive data mining.
-*   **Emphasize Part 'E':** Teachers grading BI projects care most about the *Business Value*. Spend a lot of time pointing to your Customer Profiling table and saying, *"Look here—this state has fewer buyers, but they spend twice as much. A business manager looking at my dashboard would immediately know where to spend their advertising money."*
