@@ -1,0 +1,42 @@
+// =====================================================================
+// RETAIL PERFORMANCE — ADVANCED DAX MEASURES
+// =====================================================================
+// HOW TO USE:
+// Add these to your existing _Measures table just like before.
+// =====================================================================
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ADVANCED CUSTOMER METRICS (RFM)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Average Orders per Customer = 
+DIVIDE([Total Orders], [Unique Customers], 0)
+
+Revenue per Customer = 
+DIVIDE([Total Revenue], [Unique Customers], 0)
+
+% of Orders Discounted = 
+DIVIDE(
+    CALCULATE([Total Orders], retail_dataset_45k[discount_percent] > 0),
+    [Total Orders],
+    0
+)
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CORRELATION & BEHAVIOR METRICS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rating - Delivered Orders = 
+CALCULATE(
+    [Average Customer Rating],
+    retail_dataset_45k[order_status] = "Delivered"
+)
+
+Rating - Returned Orders = 
+CALCULATE(
+    [Average Customer Rating],
+    retail_dataset_45k[order_status] = "Returned"
+)
+
+Average Shipping Cost per Order = 
+DIVIDE([Total Shipping Cost], [Total Orders], 0)
