@@ -1,0 +1,73 @@
+{
+  "name": "Retail Performance Dashboard Theme",
+  "dataColors": [
+    "#005b96",
+    "#00b4d8",
+    "#2ecc71",
+    "#f59e0b",
+    "#ef4444",
+    "#8b5cf6",
+    "#fbbf24",
+    "#374151"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#1f2937",
+  "tableAccent": "#005b96",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 16,
+      "color": "#111827"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 13,
+      "color": "#374151"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#6b7280"
+    },
+    "callout": {
+      "fontFace": "Segoe UI",
+      "fontSize": 28,
+      "color": "#111827"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "border": [{ "show": true, "color": { "solid": { "color": "#e5e7eb" } }, "radius": 8 }],
+        "title": [{
+          "show": true,
+          "fontColor": { "solid": { "color": "#111827" } },
+          "fontSize": 12,
+          "fontFamily": "Segoe UI Semibold",
+          "alignment": "left"
+        }],
+        "visualHeader": [{ "show": false }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#f3f4f6" } }, "transparency": 0 }]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [{
+          "color": { "solid": { "color": "#111827" } },
+          "fontSize": 28,
+          "fontFamily": "Segoe UI Semibold"
+        }],
+        "categoryLabels": [{
+          "color": { "solid": { "color": "#6b7280" } },
+          "fontSize": 11,
+          "fontFamily": "Segoe UI"
+        }]
+      }
+    }
+  }
+}

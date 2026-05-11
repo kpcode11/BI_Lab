@@ -1,0 +1,98 @@
+// =====================================================================
+// RETAIL PERFORMANCE DASHBOARD — COMPLETE DAX MEASURES
+// =====================================================================
+// HOW TO USE:
+// 1. In Power BI Desktop, right-click in Fields pane → "New measure"
+// 2. Copy each measure block (the part starting with the name = ...)
+// 3. Paste into the formula bar one at a time
+// 4. Press Enter to save each measure
+// =====================================================================
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CORE RETAIL KPIs
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Total Revenue = SUM(retail_dataset_45k[total_amount])
+
+Total Orders = DISTINCTCOUNT(retail_dataset_45k[order_id])
+
+Total Quantity Sold = SUM(retail_dataset_45k[quantity])
+
+Average Order Value (AOV) = 
+DIVIDE([Total Revenue], [Total Orders], 0)
+
+Total Shipping Cost = SUM(retail_dataset_45k[shipping_cost])
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// DISCOUNT METRICS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Total Discount Amount = SUM(retail_dataset_45k[discount_amount])
+
+Average Discount % = AVERAGE(retail_dataset_45k[discount_percent])
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CUSTOMER ACTIVITY & FEEDBACK
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Unique Customers = DISTINCTCOUNT(retail_dataset_45k[customer_id])
+
+Average Customer Rating = AVERAGE(retail_dataset_45k[customer_rating])
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// TIME INTELLIGENCE (Based on order_date)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Revenue Previous Year = 
+CALCULATE(
+    [Total Revenue],
+    SAMEPERIODLASTYEAR(retail_dataset_45k[order_date])
+)
+
+Revenue YoY Change = 
+[Total Revenue] - [Revenue Previous Year]
+
+Revenue YoY % Change = 
+DIVIDE([Revenue YoY Change], [Revenue Previous Year], 0)
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// OPERATIONS & FULFILLMENT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Returned Orders = 
+CALCULATE(
+    [Total Orders],
+    retail_dataset_45k[order_status] = "Returned"
+)
+
+Return Rate % = 
+DIVIDE([Returned Orders], [Total Orders], 0)
+
+Delivered Orders = 
+CALCULATE(
+    [Total Orders],
+    retail_dataset_45k[order_status] = "Delivered"
+)
+
+Average Shipping Duration = AVERAGE(retail_dataset_45k[Shipping Duration])
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CONDITIONAL FORMATTING HELPERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+YoY Color = 
+IF([Revenue YoY % Change] >= 0, "#2ecc71", "#ef4444") // Green if positive, Red if negative
+
+Return Rate Color = 
+SWITCH(
+    TRUE(),
+    [Return Rate %] <= 0.05, "#2ecc71", // Good (<5%)
+    [Return Rate %] <= 0.10, "#f59e0b", // Warning (5-10%)
+    "#ef4444" // Bad (>10%)
+)

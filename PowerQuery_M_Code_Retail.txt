@@ -1,0 +1,71 @@
+// =====================================================================
+// RETAIL PERFORMANCE — POWER QUERY M-CODE
+// =====================================================================
+// HOW TO USE:
+// 1. Open Power BI Desktop → Get Data → Blank Query
+// 2. Click "Advanced Editor" in Home tab
+// 3. DELETE everything in the editor
+// 4. PASTE the entire code block below
+// 5. Update the file path on the first line to match your CSV location
+// 6. Click Done → Close & Apply
+// =====================================================================
+
+let
+    // ⚠️ CHANGE THIS PATH to where your CSV is saved
+    Source = Csv.Document(File.Contents("C:\Users\praja\OneDrive\Desktop\BI_Lab\retail_dataset_45k.csv"),[Delimiter=",", Columns=22, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+    
+    PromoteHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+
+    // Parse the order_date (dd-mm-yyyy)
+    ParseOrderDate = Table.TransformColumns(PromoteHeaders, {
+        {"order_date", each try Date.From(
+            #date(
+                Number.From(Text.Range(_, 6, 4)),
+                Number.From(Text.Range(_, 3, 2)),
+                Number.From(Text.Range(_, 0, 2))
+            )
+        ) otherwise null, type date}
+    }),
+
+    // Parse the ship_date (dd-mm-yyyy)
+    ParseShipDate = Table.TransformColumns(ParseOrderDate, {
+        {"ship_date", each try Date.From(
+            #date(
+                Number.From(Text.Range(_, 6, 4)),
+                Number.From(Text.Range(_, 3, 2)),
+                Number.From(Text.Range(_, 0, 2))
+            )
+        ) otherwise null, type date}
+    }),
+
+    // Set correct data types for numeric metrics
+    TypedColumns = Table.TransformColumnTypes(ParseShipDate, {
+        {"customer_age", Int64.Type},
+        {"quantity", Int64.Type},
+        {"unit_price", type number},
+        {"discount_percent", type number},
+        {"discount_amount", type number},
+        {"shipping_cost", type number},
+        {"total_amount", type number},
+        {"customer_rating", type number}
+    }),
+
+    // ── ADD TIME-INTELLIGENCE COLUMNS FOR ORDER DATE ──
+    AddYear = Table.AddColumn(TypedColumns, "Year", each Date.Year([order_date]), Int64.Type),
+    AddMonth = Table.AddColumn(AddYear, "Month", each Date.Month([order_date]), Int64.Type),
+    AddMonthName = Table.AddColumn(AddMonth, "MonthName", each Date.ToText([order_date], "MMM"), type text),
+    AddQuarter = Table.AddColumn(AddMonthName, "Quarter", each "Q" & Number.ToText(Date.QuarterOfYear([order_date])), type text),
+    
+    // ── ADD DEMOGRAPHIC AGE GROUP ──
+    AddAgeGroup = Table.AddColumn(AddQuarter, "Age Group", each 
+        if [customer_age] < 25 then "18-24"
+        else if [customer_age] < 35 then "25-34"
+        else if [customer_age] < 45 then "35-44"
+        else if [customer_age] < 55 then "45-54"
+        else "55+", type text),
+        
+    // ── CALCULATE SHIPPING DURATION (DAYS) ──
+    AddShippingDuration = Table.AddColumn(AddAgeGroup, "Shipping Duration", each Duration.Days([ship_date] - [order_date]), Int64.Type)
+
+in
+    AddShippingDuration
